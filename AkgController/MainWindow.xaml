@@ -1,0 +1,230 @@
+<Window x:Class="AkgController.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AKG N9 Hybrid 降噪控制"
+        Height="500"
+        Width="450"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F5F5">
+
+    <Window.Resources>
+        <!-- 按鈕樣式 -->
+        <Style x:Key="MainButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.85"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- 模式按鈕樣式 -->
+        <Style x:Key="ModeButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F0F0F0"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="25">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 標題區 -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="AKG N9 Hybrid"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="#333333"
+                       HorizontalAlignment="Center"/>
+            <TextBlock Text="降噪控制程式"
+                       FontSize="14"
+                       Foreground="#666666"
+                       HorizontalAlignment="Center"
+                       Margin="0,5,0,0"/>
+        </StackPanel>
+
+        <!-- 連接狀態 -->
+        <Border Grid.Row="1"
+                Background="White"
+                CornerRadius="8"
+                Padding="15"
+                Margin="0,0,0,20">
+            <StackPanel>
+                <TextBlock x:Name="StatusText"
+                           Text="未連接"
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           Foreground="#666666"
+                           HorizontalAlignment="Center"/>
+                <Button x:Name="ConnectButton"
+                        Content="連接耳機"
+                        Click="ConnectButton_Click"
+                        Height="40"
+                        Margin="0,10,0,0"
+                        FontSize="14"
+                        Background="#4CAF50"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    CornerRadius="6">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Opacity" Value="0.85"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <!-- 主要控制按鈕 -->
+        <StackPanel Grid.Row="2" Margin="0,0,0,20">
+            <Button x:Name="AncOnButton"
+                    Content="🎧 開啟降噪"
+                    Click="AncOnButton_Click"
+                    Background="#2196F3"
+                    Style="{StaticResource MainButtonStyle}"
+                    IsEnabled="False"/>
+
+            <Button x:Name="AncOffButton"
+                    Content="🔇 關閉降噪"
+                    Click="AncOffButton_Click"
+                    Background="#9E9E9E"
+                    Style="{StaticResource MainButtonStyle}"
+                    IsEnabled="False"/>
+
+            <Button x:Name="PassThroughButton"
+                    Content="🔊 環境音模式"
+                    Click="PassThroughButton_Click"
+                    Background="#FF9800"
+                    Style="{StaticResource MainButtonStyle}"
+                    IsEnabled="False"/>
+        </StackPanel>
+
+        <!-- 進階模式選擇 -->
+        <Border Grid.Row="3"
+                Background="White"
+                CornerRadius="8"
+                Padding="15">
+            <StackPanel>
+                <TextBlock Text="進階模式"
+                           FontSize="13"
+                           FontWeight="SemiBold"
+                           Foreground="#666666"
+                           Margin="0,0,0,10"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Button x:Name="Anc1Button"
+                            Content="ANC 模式 1"
+                            Click="Anc1Button_Click"
+                            Grid.Row="0" Grid.Column="0"
+                            Style="{StaticResource ModeButtonStyle}"
+                            IsEnabled="False"/>
+
+                    <Button x:Name="Anc2Button"
+                            Content="ANC 模式 2"
+                            Click="Anc2Button_Click"
+                            Grid.Row="0" Grid.Column="1"
+                            Style="{StaticResource ModeButtonStyle}"
+                            IsEnabled="False"/>
+
+                    <Button x:Name="PassThrough1Button"
+                            Content="環境音模式 1"
+                            Click="PassThrough1Button_Click"
+                            Grid.Row="1" Grid.Column="0"
+                            Style="{StaticResource ModeButtonStyle}"
+                            IsEnabled="False"/>
+
+                    <Button x:Name="PassThrough2Button"
+                            Content="環境音模式 2"
+                            Click="PassThrough2Button_Click"
+                            Grid.Row="1" Grid.Column="1"
+                            Style="{StaticResource ModeButtonStyle}"
+                            IsEnabled="False"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- 版本資訊 -->
+        <TextBlock Grid.Row="4"
+                   Text="v1.1 - 基於 Airoha RACE 協定開發"
+                   FontSize="10"
+                   Foreground="#999999"
+                   HorizontalAlignment="Center"
+                   Margin="0,15,0,0"/>
+    </Grid>
+</Window>
