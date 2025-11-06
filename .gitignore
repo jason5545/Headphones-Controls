@@ -5,6 +5,7 @@ jadx/
 
 # Claude Code 設定
 .claude/
+.claude.md
 
 # Visual Studio
 .vs/
